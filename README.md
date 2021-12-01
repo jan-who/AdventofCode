@@ -1,2 +1,2 @@
 # AdventofCode
-Advent of Code solutions
+My personal Advent of Code solutions for learning python
