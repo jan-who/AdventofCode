@@ -50,6 +50,38 @@ def part_one(test=False):
 
     print(f"Answer for part one: {gamma_rate_int * epsilon_rate_int}")
 
+def part_two(test=False):
+    if test:
+        data = testdata
+    else:
+        data = file
+    data = [[int(y) for y in x] for x in data]
+    df = pd.DataFrame(data)
+
+    oxygen = df.copy()
+    co2 = df.copy()
+
+    columns = len(df.iloc[0,:])
+    for idx in range(columns):
+        if len(oxygen) > 1:
+            most_common_bit = 1 if sum(oxygen.iloc[:,idx])*2 >= len(oxygen.iloc[:,idx]) else 0
+            oxygen = oxygen[oxygen.iloc[:,idx] == most_common_bit]
+
+        if len(co2) > 1:
+            ct_0 = len(co2[co2.iloc[:,idx] == 0])
+            ct_1 = len(co2[co2.iloc[:,idx] == 1])
+            least_common_bit = 0 if ct_0 <= ct_1 else 1
+        
+            co2 = co2[co2.iloc[:,idx] == least_common_bit]
+    
+    oxygen_str = ''.join(str(i) for i in oxygen.values[0])
+    oxygen_int = int(oxygen_str, 2)
+
+    co2_str = ''.join(str(i) for i in co2.values[0])
+    co2_int = int(co2_str, 2)
+
+    print(f"Answer for part two: {oxygen_int * co2_int}")
+
 if __name__ == "__main__":
-    part_one(False)
-    #part_two(False)
+    part_one()
+    part_two()
