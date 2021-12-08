@@ -36,6 +36,26 @@ def part_one(days_needed, test=False):
         day += 1
     print(f"Fish after {days_needed} days: {len(lanternfish)}")
 
+def lanternfish(old_fish, days_total, fish_kids=0): 
+    print(f'Fish has tick {old_fish}, after {days_total} its {old_fish-days_total}. Kids: {fish_kids}')
+    if old_fish >= 0:
+        return 1 + fish_kids
+    #return lanternfish(old_fish-days_total)
+
+def part_two(days_needed, test=False):
+    if test:
+        data = testdata
+    else:
+        data = file
+    data = [int(x) for x in data[0].split(',')]
+    
+    # mathematisch rekursiv?
+    count_fish = 0
+    print(data)
+    for fish in data:
+        count_fish += lanternfish(fish, days_needed)
+        break
+
 if __name__ == "__main__":
-    part_one(days_needed=80)
-    # part_one(days_needed=256, test=True)
+    part_one(days_needed=80, test=False)
+    part_two(days_needed=4, test=True)
