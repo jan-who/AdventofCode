@@ -1,6 +1,7 @@
 from os import read
 from utils import read_input
 import pandas as pd
+import math
 
 file = read_input("day6")
 
@@ -13,7 +14,7 @@ def part_one(days_needed, test=False):
     else:
         data = file
     data = [int(x) for x in data[0].split(',')]
-    
+
     day = 0
     lanternfish = data
     # print(f"Initial state: {lanternfish}")
@@ -31,16 +32,10 @@ def part_one(days_needed, test=False):
 
             new_lanternfish.append(fish)
         lanternfish = list(new_lanternfish)
+        day += 1
         # print(f"After {day} days: {lanternfish}")
 
-        day += 1
     print(f"Fish after {days_needed} days: {len(lanternfish)}")
-
-def lanternfish(old_fish, days_total, fish_kids=0): 
-    print(f'Fish has tick {old_fish}, after {days_total} its {old_fish-days_total}. Kids: {fish_kids}')
-    if old_fish >= 0:
-        return 1 + fish_kids
-    #return lanternfish(old_fish-days_total)
 
 def part_two(days_needed, test=False):
     if test:
@@ -49,13 +44,18 @@ def part_two(days_needed, test=False):
         data = file
     data = [int(x) for x in data[0].split(',')]
     
-    # mathematisch rekursiv?
-    count_fish = 0
-    print(data)
-    for fish in data:
-        count_fish += lanternfish(fish, days_needed)
-        break
+    lanternfish = [0] * 9
+
+    for no in data:
+        lanternfish[no] += 1
+
+    for _ in range(days_needed):
+        day_zero = lanternfish.pop(0)
+        lanternfish[6] += day_zero
+        lanternfish.append(day_zero)
+
+    print(f'Fish after {days_needed} days: {sum(lanternfish)}')
 
 if __name__ == "__main__":
-    part_one(days_needed=80, test=False)
-    part_two(days_needed=4, test=True)
+    part_one(days_needed=80)
+    part_two(days_needed=256)
