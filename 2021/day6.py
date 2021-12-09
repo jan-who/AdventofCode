@@ -1,7 +1,5 @@
 from os import read
 from utils import read_input
-import pandas as pd
-import math
 
 file = read_input("day6")
 
