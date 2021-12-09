@@ -35,13 +35,11 @@ def part_two(test=False):
 
     MAX_POSITION = max(data)
     best_fuel_needed = None
-    for target_pos in range(5,6):
+    for target_pos in range(MAX_POSITION):
         fuel_needed = 0
         for crab in data:
             steps = abs(crab-target_pos)
-            fuel_crab = sum([x for x in range(steps)])
-            print(f'Crab {crab} needs {fuel_crab} for {steps} steps')
-            fuel_needed += math.factorial(abs(crab-target_pos))
+            fuel_needed += math.comb(steps+1, 2)
 
         if best_fuel_needed is None or best_fuel_needed > fuel_needed:
             best_fuel_needed = fuel_needed
@@ -50,4 +48,4 @@ def part_two(test=False):
 
 if __name__ == "__main__":
     part_one()
-    part_two(True)
+    part_two()
