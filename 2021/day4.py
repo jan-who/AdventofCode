@@ -31,28 +31,6 @@ def part_one(test=False):
         data = file
 
     random_numbers = data[0]
-    
-    boards = []
-    board = []
-    for line in data[2:]:
-        print("line: " + line)
-        if line == "":
-            boards.append(board)
-            board = []
-        else:
-            l = []
-            for n in line.split(' '):
-                if n != "":
-                    l.append(int(n))
-            board.append(l)
-    print("\n\n")
-    print(boards)
-
-    # make 5x5 grid for each board, filled with ones
-    # board in 5x5 grid as well
-    # for each row/column a list - if drawn_number is in list
-    # mark grid in position of row/column with 0
-    # sum of unmarked - multiply both grids
 
 if __name__ == "__main__":
     part_one(True)
