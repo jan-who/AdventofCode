@@ -1,5 +1,6 @@
 from utils import read_input
 import pandas as pd
+import numpy as np
 
 file = read_input("day9")
 
@@ -42,57 +43,50 @@ def part_two(test=False):
         data = file
     df = pd.DataFrame([[int(x) for x in y] for y in data])
 
-    point_in_baisin = []
+    total_points_visited = []
     baisins = []
     for row in range(df.shape[0]):
         for col in range(df.shape[1]):
             coords = (row,col)
 
-            if df.iloc[coords] == 9 or coords in point_in_baisin:
+            if df.iloc[coords] == 9 or coords in total_points_visited:
                 continue
 
-            baisin = []
             to_check = []
-            if col-1 >= 0 and df.iloc[col-1,row] != 9:
-                to_check.append((col-1,row))
-            if col+1 < df.shape[1]+1 and df.iloc[col+1,row] != 9:
-                to_check.append((col+1,row))
-            if row-1 >= 0 and df.iloc[col,row-1] != 9:
-                to_check.append((col,row-1))
-            if row+1 < df.shape[0]+1 and df.iloc[col,row+1] != 9:
-                to_check.append((col,row+1))
+            if col-1 >= 0 and df.iloc[row,col-1] != 9:
+                to_check.append((row,col-1))
+            if col+1 < df.shape[1] and df.iloc[row,col+1] != 9:
+                to_check.append((row,col+1))
+            if row-1 >= 0 and df.iloc[row-1,col] != 9:
+                to_check.append((row-1,col))
+            if row+1 < df.shape[0] and df.iloc[row+1,col] != 9:
+                to_check.append((row+1,col))
             visited = [coords]
-
-            print(f"point: {coords}; check: {to_check}; visit: {visited}")
-            break
+            
             while to_check:
-                print(f"to_check: {to_check}")
-                print(f"visited: {visited}")
-                x,y = to_check.pop()
-                if df.iloc[x,y] == 9:
-                    continue
+                y,x = to_check.pop()
 
-                if x <= df.shape[1]-1 and x >= 0 and \
-                    y <= df.shape[0]-1 and y >= 0 and \
-                        (x,y) not in visited and df.iloc[x,y] != 9:
-                    baisin.append((x,y))
-                
-                if (x,y) not in visited:
-                    visited.append((x,y))
-                if x-1 >= 0 and (x-1,y) not in to_check:
-                    to_check.append((x+1,y))
-                if x+1 < df.shape[1]+1 and (x,y-1) not in to_check:
-                    to_check.append((x+1,y))
-                if y-1 >= 0 and (x-1,y) not in to_check:
-                    to_check.append((x,y-1))
-                if y+1 < df.shape[0]+1 and (x,y+1) not in to_check:
-                    to_check.append((x,y+1))
+                if (y,x) not in visited:
+                    visited.append((y,x))
 
-                point_in_baisin.append(coords)
-            baisins.append(baisin)
-            print(baisin)
-            break
+                if x-1 >= 0 and (y,x-1) not in to_check+visited and df.iloc[(y,x-1)] != 9:
+                    to_check.append((y,x-1))
+                if x+1 < df.shape[1] and (y,x+1) not in to_check+visited and df.iloc[(y,x+1)] != 9:
+                    to_check.append((y,x+1))
+                if y-1 >= 0 and (y-1,x) not in to_check+visited and df.iloc[(y-1,x)] != 9:
+                    to_check.append((y-1,x))
+                if y+1 < df.shape[0] and (y+1,x) not in to_check+visited and df.iloc[(y+1,x)] != 9:
+                    to_check.append((y+1,x))
+
+            baisins.append(visited)
+            total_points_visited += visited
+
+    # find the length of the largest 3
+    baisins_length = [len(x) for x in baisins]
+    baisins_length.sort()
+    answer = np.prod(baisins_length[-3:])
+    print(f'The sum of the largest three is: {answer}')
 
 if __name__ == "__main__":
-    #part_one()
-    part_two(True)
+    part_one()
+    part_two()
